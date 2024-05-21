@@ -19,6 +19,7 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 const Header = () => {
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+    const [open, setOpen] = React.useState(false);
 
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -36,10 +37,27 @@ const Header = () => {
         setAnchorElUser(null);
     };
 
+    const handleDrawerOpen = () => {
+        setOpen(true);
+    };
+
     return (
         <AppBar position="static">
+
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
+                    {/* <IconButton
+                        color="inherit"
+                        aria-label="open drawer"
+                        onClick={handleDrawerOpen}
+                        edge="start"
+                        sx={{
+                            marginRight: 5,
+                            ...(open && { display: 'none' }),
+                        }}
+                    >
+                        <MenuIcon />
+                    </IconButton> */}
                     <Typography
                         variant="h6"
                         noWrap

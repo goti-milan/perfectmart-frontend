@@ -2,13 +2,15 @@ import React from 'react'
 import Header from './components/header/header'
 import Footer from './components/footer/footer'
 import { Outlet } from 'react-router-dom'
+import SideBar from './components/sideBar'
 
 const Root = () => {
   return (
     <div>
       <Header />
-        <Outlet/>
-      <Footer/>
+        <SideBar />
+        <Outlet />
+      <Footer />
     </div>
   )
 }

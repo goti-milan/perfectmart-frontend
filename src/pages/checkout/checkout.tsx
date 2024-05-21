@@ -20,7 +20,7 @@ const CheckOut = () => {
                 {activeStep === 0 ? <Address activeStep={activeStep} setActiveStep={setActiveStep} />
                     : activeStep === 1 ? <Delivery setActiveStep={setActiveStep} /> :
                         activeStep === 2 ? <ConfirmOrder setActiveStep={setActiveStep} /> :
-                            activeStep === 3 ? <PaymentPage /> : " null"}
+                            activeStep === 3 ? <PaymentPage /> : null}
             </Grid>
 
         </Grid>
