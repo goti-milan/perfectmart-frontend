@@ -1,50 +1,107 @@
 import React, { useState } from 'react'
-import { Container, Grid, Typography, Button, Card, CardActionArea, CardActions, CardContent, CardMedia } from '@mui/material';
+import { Container, Grid, Typography, Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Tabs, Tab, Divider, Rating } from '@mui/material';
 import ProductDescription from '../../components/product-description/productDescription';
 import ProductReviewList from '../../components/productReview/productReviewList';
+import Slider from 'react-slick';
+import { singleProduct } from '../../utils/static';
+import SizeChart from '../../components/sizeChart';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+
+
+const productSliderSettings = {
+  dots: true,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  autoplay: false,
+  autoplaySpeed: 3000,
+};
+
+const products = [
+  { id: 1, brand: 'KETCH', fit: 'Men Skinny Fit Jeans', price: 599, originalPrice: 1699, discount: 1100, rating: 3.8, imgSrc: '/path/to/image1.jpg' },
+  { id: 2, brand: 'Roadster', fit: 'Men Slim Fit Jeans', price: 699, originalPrice: 1999, discount: 65, rating: 3.7, imgSrc: '/path/to/image2.jpg' },
+  // Add more products as necessary
+];
+
+const newProducts = [
+  { img: 'https://pandafoods.co.in/wp-content/uploads/2015/04/pineapple-jam.jpg', title: 'New Product 1' },
+  { img: 'https://pandafoods.co.in/wp-content/uploads/2015/04/pineapple-jam.jpg', title: 'New Product 2' },
+  { img: 'https://pandafoods.co.in/wp-content/uploads/2015/04/pineapple-jam.jpg', title: 'New Product 3' }
+];
 
 const Product = () => {
-const [productDescriptionSection, setProductDescriptionSection] = useState(true);
+  const [productDescriptionSection, setProductDescriptionSection] = useState(0);
+
+  const handleChange = (event: any, newValue: React.SetStateAction<number>) => {
+    setProductDescriptionSection(newValue);
+  };
+
+
+  const [product, setProduct] = useState(singleProduct)
+
+
+  console.log('product', product);
 
 
   return (
     <div>
-      <Container  maxWidth="lg" style={{ marginTop: '20px' }}>
+      <Container maxWidth="lg" style={{ marginTop: '20px' }}>
         <Typography>
-          Home
-          Shop
-          Foundations Matte Flip Flop
+          <span>Home</span>
+          <span>{product?.mainCategory}</span>
+          <span>{product?.subCategory}</span>
+          <span>{product?.subCategory}</span>
+          <span>{product?.title}</span>
         </Typography>
         <Grid container spacing={3}>
           <Grid item xs={12} md={6}>
             <Grid container >
               <Card>
                 <CardActionArea>
-                  <CardMedia
-                    component="img"
-                    height="auto"
-                    image="https://hips.hearstapps.com/hmg-prod/images/run-affordable-running-shoes-1676481206.jpg?resize=2048:*"
-                    alt="Product Image"
-                  />
+                  <Slider {...productSliderSettings}>
+                    {product?.images?.map((image, index) => (
+                      <CardMedia
+                        key={index}
+                        component="img"
+                        height="auto"
+                        image={image.img}
+                        alt="Product Image"
+                        style={{ aspectRatio: 1 }}
+
+                      />
+                    ))}
+                  </Slider>
                 </CardActionArea>
               </Card>
             </Grid>
 
-            <Grid container spacing={1}>
-              {Array.from({ length: 5 }).map((_, index) => (
-                <Grid item xs={2} key={index}>
-                  <Card>
-                    <CardActionArea>
-                      <CardMedia
-                        component="img"
-                        height="auto"
-                        image={`https://via.placeholder.com/100x100?text=Thumbnail+${index + 1}`}
-                        alt={`Thumbnail ${index + 1}`}
-                      />
-                    </CardActionArea>
-                  </Card>
-                </Grid>
-              ))}
+            <Grid container spacing={1} >
+
+              <Grid item display={'flex'} alignItems={'center'} height={'auto'} >
+                <Button>{'<'}</Button>
+              </Grid>
+              <Grid container xs={10} spacing={1}>
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <Grid item xs={2} key={index}>
+                    <Card>
+                      <CardActionArea>
+                        <CardMedia
+                          component="img"
+                          height="auto"
+                          image={`https://pandafoods.co.in/wp-content/uploads/2015/04/pineapple-jam.jpg`}
+                          alt={`Thumbnail ${index + 1}`}
+                        />
+                      </CardActionArea>
+                    </Card>
+                  </Grid>
+                ))}
+              </Grid>
+              <Grid item display={'flex'} alignItems={'center'} >
+                <Button>{'>'}</Button>
+              </Grid>
+
             </Grid>
           </Grid>
           <Grid item xs={12} md={6}>
@@ -55,24 +112,32 @@ const [productDescriptionSection, setProductDescriptionSection] = useState(true)
               IN STOCK
             </Typography>
             <Typography variant="h4" gutterBottom>
-              Foundations Matte Flip Flop
+              {product?.title}
             </Typography>
             <Typography>
-              Featuring the original ripple design inspired by Japanese bullet trains, the Nike Air Max 97 lets you push your style full-speed ahead.
+              {product?.description}
             </Typography>
             <Typography>
               color black
             </Typography>
-            <Typography>
-              size 10
-            </Typography>
+            <Grid container gap={2}>
+              {product?.sizes?.map((size) => <SizeChart size={size} />)}
+            </Grid>
             <Typography>
               qty 1 + 1 -
             </Typography>
-            <Typography variant="h6" gutterBottom>
-              $99.99
-            </Typography>
-            <Grid container justifyContent="center" spacing={2}>
+            <Grid container gap={1} >
+              <Grid item>
+                {product.price}RS
+              </Grid>
+              <Grid item>
+                {product.mrp}Rs
+              </Grid>
+              <Grid item>
+                {product?.discount}% OFF
+              </Grid>
+            </Grid>
+            <Grid container justifyContent="center" spacing={2} height={80}>
               <Grid item>
                 <Button variant="contained" color="primary">
                   Add to Cart
@@ -84,9 +149,12 @@ const [productDescriptionSection, setProductDescriptionSection] = useState(true)
                 </Button>
               </Grid>
             </Grid>
-            <Typography>
-              Add to Favorite
-            </Typography>
+            <Grid display={'flex'} alignContent={'flex-start'} gap={2}>
+              <Typography>
+                Add to Favorite
+              </Typography>
+              {product?.isWishList ? <FavoriteIcon style={{ color: "red" }} /> : <FavoriteBorderOutlinedIcon />}
+            </Grid>
           </Grid>
         </Grid>
 
@@ -114,17 +182,40 @@ const [productDescriptionSection, setProductDescriptionSection] = useState(true)
 
         {/* Description section */}
 
-        <Grid container spacing={3}>
-          <div aria-disabled={productDescriptionSection} onClick={()=> setProductDescriptionSection(true)}>Description</div>
-          <div aria-disabled={!productDescriptionSection} onClick={()=> setProductDescriptionSection(false)} >Review</div>
-        </Grid>
+        <Tabs value={productDescriptionSection} onChange={handleChange} aria-label="product description and review tabs">
+          <Tab label="Description" value={0} />
+          <Tab label="Review" value={1} />
+        </Tabs>
+        <Divider />
         <Grid>
           {
-            productDescriptionSection ? <ProductDescription /> : <ProductReviewList />
+            !productDescriptionSection ? <ProductDescription /> : <ProductReviewList ratings={product?.rating} />
           }
         </Grid>
 
       </Container>
+      <Grid container spacing={3}>
+        {products.map(product => (
+          <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
+            <Card>
+              <CardMedia
+                component="img"
+                height="140"
+                image={product.imgSrc}
+                alt={product.brand}
+              />
+              <CardContent>
+                <Typography variant="h6">{product.brand}</Typography>
+                <Typography variant="body2" color="textSecondary">{product.fit}</Typography>
+                <Typography variant="h6">Rs. {product.price}</Typography>
+                <Typography variant="body2" color="textSecondary" sx={{ textDecoration: 'line-through' }}>Rs. {product.originalPrice}</Typography>
+                <Typography variant="body2" color="error">({product.discount}% OFF)</Typography>
+                <Rating value={product.rating} precision={0.1} readOnly />
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
     </div>
   )
 }

@@ -5,21 +5,26 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-const pages = ['Products', 'Pricing', 'Checkout'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const pages = ['Products', 'Pricing', 'Checkout', "signup", "whishlist"];
+const settings = [
+    { value: 'profile', label: 'Profile' },
+    { value: 'account', label: 'Account' },
+    { value: 'dashboard', label: 'Dashboard' },
+    { value: 'logout', label: 'Logout' }
+  ]
 
 const Header = () => {
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
     const [open, setOpen] = React.useState(false);
+    const naviagte = useNavigate();
 
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -33,31 +38,21 @@ const Header = () => {
         setAnchorElNav(null);
     };
 
-    const handleCloseUserMenu = () => {
+    const handleCloseUserMenu = (value: any) => {
         setAnchorElUser(null);
+        naviagte(`/${value}`);
     };
 
     const handleDrawerOpen = () => {
         setOpen(true);
     };
 
+
     return (
         <AppBar position="static">
 
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    {/* <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        sx={{
-                            marginRight: 5,
-                            ...(open && { display: 'none' }),
-                        }}
-                    >
-                        <MenuIcon />
-                    </IconButton> */}
                     <Typography
                         variant="h6"
                         noWrap
@@ -75,44 +70,6 @@ const Header = () => {
                         PERFECTMART
                     </Typography>
 
-                    {/* <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-                        <IconButton
-                            size="large"
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            onClick={handleOpenNavMenu}
-                            color="inherit"
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                        <Menu
-                            id="menu-appbar"
-                            anchorEl={anchorElNav}
-                            anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'left',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'left',
-                            }}
-                            open={Boolean(anchorElNav)}
-                            onClose={handleCloseNavMenu}
-                            sx={{
-                                display: { xs: 'block', md: 'none' },
-                            }}
-                        >
-                            {pages.map((page) => (
-                                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                    <Link to={`/${page}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                                        <Typography textAlign="center">{page}</Typography>
-                                    </Link>
-                                </MenuItem>
-                            ))}
-                        </Menu>
-                    </Box> */}
                     <Typography
                         variant="h5"
                         noWrap
@@ -166,8 +123,8 @@ const Header = () => {
                             onClose={handleCloseUserMenu}
                         >
                             {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center">{setting}</Typography>
+                                <MenuItem key={setting.value} onClick={()=>handleCloseUserMenu(setting.value)}>
+                                    <Typography textAlign="center">{setting.label}</Typography>
                                 </MenuItem>
                             ))}
                         </Menu>
